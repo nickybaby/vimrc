@@ -12,9 +12,9 @@ call vundle#begin()
 
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
+Plugin 'davidhalter/jedi-vim'
 Plugin 'tmhedberg/SimpylFold'
 Plugin 'vim-scripts/indentpython.vim'
-Plugin 'Valloric/YouCompleteMe'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'nvie/vim-flake8'
 Plugin 'jnurmine/Zenburn'
@@ -22,21 +22,19 @@ Plugin 'challenger-deep-theme/vim', {'name': 'challenger-deep'}
 Plugin 'scrooloose/nerdtree'
 Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'jpalardy/vim-slime'
-Plugin 'puremourning/vimspector'
-
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'ghifarit53/tokyonight-vim'
 " add all your plugins here (note older versions of Vundle
 " used Bundle instead of Plugin)
-
 " ...
+let g:tokyonight_style = 'night'
 
+let g:jedi#use_tabs_not_buffers = 1
+let g:jedi#show_call_signatures = "1"
+autocmd FileType python setlocal completeopt-=preview
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
-
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
 
 set foldmethod=indent
 set foldlevel=99
@@ -57,10 +55,6 @@ au BufNewFile,BufRead *.py
 
 set encoding=utf-8
 
-let g:vimspector_enable_mappings = 'HUMAN'
-let g:ycm_autoclose_preview_window_after_completion=1
-map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
-
 py3 << EOF
 import os
 import sys
@@ -77,6 +71,6 @@ if has('nvim') || has('termguicolors')
 	set termguicolors
 endif
 
-colorscheme challenger_deep
+colorscheme tokyonight
 let g:slime_target = "tmux"
 let g:slime_default_config = {"socket_name": split($TMUX, ",")[0], "target_pane": ":.2"}
