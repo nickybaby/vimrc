@@ -1,6 +1,9 @@
+syntax on
 set nocompatible              " required
+set noswapfile
+set laststatus=2
 filetype off                  " required
-set nu
+set number
 set backspace=indent,eol,start "
 
 " set the runtime path to include Vundle and initialize
@@ -12,6 +15,8 @@ call vundle#begin()
 
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'preservim/tagbar'
 Plugin 'tpope/vim-sensible'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'dense-analysis/ale'
@@ -25,13 +30,16 @@ Plugin 'nvie/vim-flake8'
 Plugin 'jnurmine/Zenburn'
 Plugin 'challenger-deep-theme/vim', {'name': 'challenger-deep'}
 Plugin 'scrooloose/nerdtree'
-Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+Plugin 'itchyny/lightline.vim'
 Plugin 'jpalardy/vim-slime'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'ghifarit53/tokyonight-vim'
 " add all your plugins here (note older versions of Vundle
 " used Bundle instead of Plugin)
 " ...
+let g:lightline = {
+  \ 'colorscheme': 'wombat',
+  \ }
 let g:tokyonight_style = 'night'
 let g:slime_target="tmux"
 let g:slime_paste_file = "$HOME/.slime_paste"
@@ -39,7 +47,6 @@ let g:slime_default_config = {"socket_name": get(split($TMUX, ","), 0), "target_
 
 let g:fzrf_preview_window = ['right:50%', 'ctrl-/']
 
-let g:jedi#use_tabs_not_buffers = 1
 let g:jedi#show_call_signatures = "1"
 autocmd FileType python setlocal completeopt-=preview
 " All of your Plugins must be added before the following line
@@ -50,35 +57,24 @@ set foldmethod=indent
 set foldlevel=99
 
 nnoremap <space> za
+nnoremap <C-N> :bnext<CR>
+nnoremap <C-P> :bprev<CR>
+nmap <F8> :TagbarToggle<CR>
 
-au BufRead, BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
-
-" PEP 8 Indentation "
-au BufNewFile,BufRead *.py
-    \ set tabstop=4 |
-    \ set softtabstop=4 |
-    \ set shiftwidth=4 |
-    \ set textwidth=120 |
-    \ set expandtab |
-    \ set autoindent |
-    \ set fileformat=unix
-
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set colorcolumn=120
+set viminfo='25,\"50,n~/.viminfo
 set encoding=utf-8
+set fileencoding=utf-8
+set t_Co=256
 
-py3 << EOF
-import os
-import sys
-if 'VIRTUAL_ENV' in os.environ:
-  project_base_dir = os.environ['VIRTUAL_ENV']
-  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-  exec(compile(open(activate_this, "rb").read(), activate_this, 'exec'), dict(__file__=activate_this))
-EOF
 
 let python_highlight_all=1
-syntax on
-
-if has('nvim') || has('termguicolors')
-	set termguicolors
+if &term =~ '^\%(screen\|tmux\)'
+	  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+	  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 endif
-
+set termguicolors
 colorscheme challenger_deep
